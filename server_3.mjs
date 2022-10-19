@@ -1,19 +1,21 @@
 /*
-Your web server can return different responses for different types of requests, 
-using dedicated urls (aka route).
-For example, this script returns different responses 
-to the client based on the request's url property:
+Serving files
+
+Your Node.js application can read files from the filesystem and return file contents in the http response.
+
 */
 
 import http from "http";
+import fs from "fs";
 http.createServer((req,res) => {
     const path = req.url.toLowerCase();
-    console.log(req.url);
-    console.log(path);
     switch(path) {
         case '/':
-            res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end('Home page');
+            fs.readFile("single-file-example.html", (err, data) => {
+             if (err) return console.error(err);
+                res.writeHead(200, {'Content-Type': 'text/html'});
+             res.end(data.toString());
+            });
             break;
         case '/about':
             res.writeHead(200, {'Content-Type': 'text/plain'});
